@@ -8,7 +8,7 @@ from mailings.views import MailingListView
 app_name = MailingsConfig.name
 
 urlpatterns = [
-    path('mailings-list/', MailingListView.as_view(), name='mailing_list'),
+    path('base/', MailingListView.as_view(), name='mailing_list'),
 ]
 
 if settings.DEBUG:
