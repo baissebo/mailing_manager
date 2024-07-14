@@ -1,30 +1,40 @@
 {% extends 'mailings/base.html' %}
 {% block content %}
-<div class="album py-5 bg-body-tertiary">
-    <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for mailing in object_list %}
-            <div class="col">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <p class="card-text">Клиент: {{ mailing.clients }}</p>
-                        <p class="card-text">Сообщение: {{ mailing.message|truncatechars:100 }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <a class="btn btn-primary" href="{% url 'mailings:mailing_detail' mailing.pk %}"
-                                   role="button">Посмотреть</a>
-                            </div>
-                            <small class="text-body-secondary">{{ mailing.created_at|timesince }}</small>
+<div class="container marketing mt-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for mailing in object_list %}
+        <div class="col">
+            <div class="d-flex flex-column align-items-center">
+                <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
+                     xmlns="http://www.w3.org/2000/svg"
+                     role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                </svg>
+                <h2 class="fw-normal">Рассылка № {{ mailing.pk }}</h2>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <p class="card-text">Клиенты: {{ mailing.clients.all|join:', ' }}</p>
+                    <p class="card-text">Сообщение: {{ mailing.message.subject|truncatechars:100 }}</p>
+                    <p class="card-text">Периодичность: {{ mailing.periodicity }}</p>
+                    <p class="card-text">Статус: {{ mailing.get_status_display }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="#"
+                               role="button">Посмотреть</a>
                         </div>
+                        <small class="text-body-secondary">{{ mailing.created_at|timesince }}</small>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
 
-<div class="paginator">
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="paginator mt-2">
     <span class="step-links">
         {% if page_obj.has_previous %}
             <a href="?page=1">&laquo; Первая</a>
@@ -41,4 +51,5 @@
         {% endif %}
     </span>
 </div>
+{% endif %}
 {% endblock %}
