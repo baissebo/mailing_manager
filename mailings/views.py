@@ -4,6 +4,11 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from mailings.models import Mailing
 
 
+class HomeView(ListView):
+    model = Mailing
+    template_name = 'mailings/home.html'
+
+
 class MailingListView(ListView):
     model = Mailing
     paginate_by = 3
