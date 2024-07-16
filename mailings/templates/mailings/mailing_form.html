@@ -1,0 +1,39 @@
+{% extends 'mailings/base.html' %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card w-50">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card-header">
+                {% if not object %}
+                <h3 class="card-title">Создание рассылки</h3>
+                {% else %}
+                <h3 class="card-title">Редактирование рассылки</h3>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% for field in form %}
+                <div class="form-group mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                {% if not object %}
+                <button type="submit" class="btn btn-light w-100 me-1">Создать</button>
+                <a class="btn btn-secondary w-100" href="{% url 'mailings:mailing_list' %}"
+                   role="button">Назад</a>
+                {% else %}
+                <button type="submit" class="btn btn-light w-100 me-1">Редактировать</button>
+                <a class="btn btn-secondary w-100" href="{% url 'mailings:mailing_detail' object.pk %}"
+                   role="button">Назад</a>
+                {% endif %}
+            </div>
+    </div>
+    </form>
+</div>
+{% endblock %}
