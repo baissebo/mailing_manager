@@ -8,6 +8,12 @@ MAILING_STATUS_CHOICES = (
     ('completed', 'Завершена'),
 )
 
+MAILING_PERIODICITY_CHOICES = (
+    ('daily', 'Раз в день'),
+    ('weekly', 'Раз в неделю'),
+    ('monthly', 'Раз в месяц'),
+)
+
 
 class Client(models.Model):
     email = models.EmailField(verbose_name="Почта клиента")
@@ -40,7 +46,7 @@ class Mailing(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата создания рассылки"
     )
-    periodicity = models.CharField(max_length=50, verbose_name="Периодичность")
+    periodicity = models.CharField(max_length=50, choices=MAILING_PERIODICITY_CHOICES, verbose_name="Периодичность")
     status = models.CharField(max_length=50, choices=MAILING_STATUS_CHOICES, verbose_name="Статус рассылки")
     message = models.ForeignKey(
         Message, verbose_name="Сообщение", on_delete=models.CASCADE
