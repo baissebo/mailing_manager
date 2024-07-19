@@ -20,6 +20,7 @@ crispy-bootstrap4 = "^2024.1"
 django-phonenumber-field = "^8.0.0"
 phonenumbers = "^8.13.39"
 python-dotenv = "^1.0.1"
+python-dateutil = "^2.9.0.post0"
 
 
 [build-system]
