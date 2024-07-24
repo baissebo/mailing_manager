@@ -6,6 +6,7 @@ MAILING_STATUS_CHOICES = (
     ('created', 'Создана'),
     ('running', 'Запущена'),
     ('completed', 'Завершена'),
+    ('failed', 'Неудача'),
 )
 
 MAILING_PERIODICITY_CHOICES = (
