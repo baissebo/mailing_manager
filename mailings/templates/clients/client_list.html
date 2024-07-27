@@ -3,43 +3,36 @@
 <div class="container marketing mt-5">
     {% if object_list %}
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for mailing in object_list %}
+        {% for client in object_list %}
         <div class="col">
             <div class="d-flex flex-column align-items-center">
                 <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
                      xmlns="http://www.w3.org/2000/svg"
                      role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                     <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                    <polygon points="70,10 130,70 70,130 10,70" fill="var(--bs-secondary-color)"/>
                 </svg>
-                <h2 class="fw-normal">Рассылка № {{ mailing.pk }}</h2>
+                <h2 class="fw-normal">Клиент {{ client.name }}</h2>
             </div>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <p class="card-text">Клиенты:
-                        {% for client in mailing.clients.all %}
-                        <a href="{% url 'mailings:client_detail' client.pk %}">{{ client.name }}</a>
+                    <p class="card-text">Email: {{ client.email }}</p>
+                    <p class="card-text">Рассылки №:
+                        {% for mailing in client.mailing_set.all %}
+                        <a href="{% url 'mailings:mailing_detail' mailing.pk %}">{{ mailing.pk }}</a>
                         {% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                        Нет рассылок
                         {% endfor %}
                     </p>
-                    <p class="card-text">Сообщение: {{ mailing.message.subject|truncatechars:100 }}</p>
-                    <p class="card-text">Периодичность: {{ mailing.get_periodicity_display }}</p>
-                    <p class="card-text">
-                        <span class="text-body">Статус:</span>
-                        {% if mailing.status == 'created' %}
-                        <span class="text-success">{{ mailing.get_status_display }}</span>
-                        {% elif mailing.status == 'running' %}
-                        <span class="text-warning">{{ mailing.get_status_display }}</span>
-                        {% else %}
-                        <span class="text-danger">{{ mailing.get_status_display }}</span>
-                        {% endif %}
-                    </p>
+                    {% if client.comment %}
+                    <p class="card-text">Комментарий: {{ client.comment|truncatechars:100 }}</p>
+                    {% endif %}
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a class="btn btn-secondary" href="{% url 'mailings:mailing_detail' mailing.pk %}"
+                            <a class="btn btn-secondary" href="{% url 'mailings:client_detail' client.pk %}"
                                role="button">Посмотреть</a>
                         </div>
-                        <small class="text-body-secondary">{{ mailing.created_at|timesince }}</small>
                     </div>
                 </div>
             </div>
@@ -49,11 +42,12 @@
     {% else %}
     <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-            <h2>Нет ни единой рассылки</h2>
-            <p class="lead">Пока нет ни одной созданной рассылки.</p>
+            <h2>Упс..</h2>
+            <p class="lead">Пока не добавлено ни одного клиента.</p>
         </div>
     </div>
     {% endif %}
+
 
     {% if page_obj.paginator.num_pages > 1 %}
     <div class="paginator mt-2">

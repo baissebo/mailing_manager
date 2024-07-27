@@ -1,4 +1,4 @@
-{% extends 'mailings/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
@@ -6,7 +6,12 @@
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <p class="card-text">Клиенты: {{ mailing.clients.all|join:', ' }}</p>
+                        <p class="card-text">Клиенты:
+                            {% for client in mailing.clients.all %}
+                            <a href="{% url 'mailings:client_detail' client.pk %}">{{ client.name }}</a>
+                            {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
                         <p class="card-text">Сообщение: {{ mailing.message.subject }}</p>
                         <p class="card-text">Периодичность: {{ mailing.get_periodicity_display }}</p>
                         <p class="card-text">

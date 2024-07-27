@@ -1,6 +1,6 @@
 {% load static %}
 <!doctype html>
-<html lang="en" class="h-100" data-bs-theme="auto">
+<html lang="en" data-bs-theme="auto">
 <head>
     <script src="{% static 'js/color-modes.js' %}"></script>
 
@@ -9,15 +9,14 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.122.0">
-    <title>Home page MM</title>
+    <title>Mailing manager</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/cover/">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
 
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -109,9 +108,9 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="{% static 'css/cover.css' %}" rel="stylesheet">
+    <link href="{% static 'css/carousel.css' %}" rel="stylesheet">
 </head>
-<body class="d-flex h-100 text-center text-bg-dark">
+<body>
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
     <symbol id="check2" viewBox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
@@ -180,33 +179,23 @@
     </ul>
 </div>
 
+<header data-bs-theme="dark">
+    {% include 'includes/inc_menu.html' %}
+</header>
 
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="mb-auto">
-        <div>
-            <h3 class="float-md-start mb-0">Mailing Manager</h3>
-            <nav class="nav nav-masthead justify-content-center float-md-end">
-                <a class="nav-link fw-bold py-1 px-0 active" href="#">Регистрация</a>
-                <a class="nav-link fw-bold py-1 px-0" href="/base/">Рассылки</a>
-                <a class="nav-link fw-bold py-1 px-0" href="#">Блог</a>
-            </nav>
-        </div>
-    </header>
+<main>
 
-    <main class="px-3">
-        <h1>Блок информации</h1>
-        <p class="lead">Всего рассылок: </p>
-        <p class="lead">Активные рассылки: </p>
-        <p class="lead">Количество уникальных клиентов: </p>
-        <p class="lead">Статьи блога: </p>
-        <a href="{% url 'mailings:mailing_create' %}" class="btn btn-lg btn-light fw-bold border-white bg-white">Создать рассылку</a>
-        </p>
-    </main>
 
-    <footer class="mt-auto text-white-50">
-        <p>Добро пожаловать в мой <a href="https://github.com/baissebo/mailing_manager.git" class="text-white">GitHub</a>
+    {% block content %}
+    {% endblock %}
+
+
+    <!-- FOOTER -->
+    <footer class="container-fluid mt-5">
+        <p class="float-end"><a href="#">Наверх</a></p>
+        <p>&copy; {% now "Y" %} &middot; <a href="/">Вернуться на главную</a></p>
     </footer>
-</div>
+</main>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 </body>

@@ -6,9 +6,9 @@
             {% csrf_token %}
             <div class="card-header">
                 {% if not object %}
-                <h3 class="card-title">Создание рассылки</h3>
+                <h3 class="card-title">Добавление клиента</h3>
                 {% else %}
-                <h3 class="card-title">Редактирование рассылки</h3>
+                <h3 class="card-title">Редактирование клиента</h3>
                 {% endif %}
             </div>
             <div class="card-body">
@@ -24,12 +24,12 @@
             </div>
             <div class="card-footer d-flex justify-content-end">
                 {% if not object %}
-                <button type="submit" class="btn btn-light w-100 me-1">Создать</button>
-                <a class="btn btn-secondary w-100" href="{% url 'mailings:mailing_list' %}"
+                <button type="submit" class="btn btn-light w-100 me-1">Добавить</button>
+                <a class="btn btn-secondary w-100" href="{% url 'mailings:client_list' %}"
                    role="button">Назад</a>
                 {% else %}
                 <button type="submit" class="btn btn-light w-100 me-1">Редактировать</button>
-                <a class="btn btn-secondary w-100" href="{% url 'mailings:mailing_detail' object.pk %}"
+                <a class="btn btn-secondary w-100" href="{% url 'mailings:client_detail' object.pk %}"
                    role="button">Назад</a>
                 {% endif %}
             </div>
