@@ -1,9 +1,8 @@
-from django.forms import modelformset_factory
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from forms import MailingForm, ClientForm, MessageForm
+from mailings.forms import MailingForm, ClientForm, MessageForm
 from mailings.models import Mailing, Client, Message
 
 

@@ -22,6 +22,8 @@ INSTALLED_APPS = [
 
     'django_crontab',
     'mailings',
+    'users',
+    'phonenumber_field',
 
 ]
 
@@ -110,3 +112,8 @@ EMAIL_RECIPIENT = os.getenv('EMAIL_RECIPIENT')
 CRONJOBS = [
     ('*/1 * * * *', 'mailings.cron.send_mailings')
 ]
+
+AUTH_USER_MODEL = 'users.User'
+
+LOGIN_REDIRECT_URL = '/users/profile/'
+LOGOUT_REDIRECT_URL = '/users/login/'
