@@ -7,20 +7,18 @@
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <p class="card-text">Email: {{ client.email }}</p>
+                        <p class="card-text">Тема письма: {{ message.subject }}</p>
+                        <p class="card-text">Текст письма: {{ message.body }}</p>
                         <p class="card-text">Рассылки №:
-                            {{ client.mailing_set.all|map:"create_link:mailings:mailing_detail,pk,"|join_by_comma|safe }}
+                            {{ message.mailing_set.all|map:"create_link:mailings:mailing_detail,pk,"|join_by_comma|safe }}
                         </p>
-                        {% if client.comment %}
-                        <p class="card-text">Комментарий: {{ client.comment }}</p>
-                        {% endif %}
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a href="{% url 'mailings:client_update' object.pk %}"
+                                <a href="{% url 'mailings:message_update' object.pk %}"
                                    class="btn btn-sm btn-light rounded me-1">Редактировать</a>
-                                <a href="{% url 'mailings:client_delete' object.pk %}"
+                                <a href="{% url 'mailings:message_delete' object.pk %}"
                                    class="btn btn-sm btn-danger rounded me-1">Удалить</a>
-                                <a href="{% url 'mailings:client_list' %}"
+                                <a href="{% url 'mailings:message_list' %}"
                                    class="btn btn-sm btn-secondary rounded me-1">Назад</a>
                             </div>
                         </div>

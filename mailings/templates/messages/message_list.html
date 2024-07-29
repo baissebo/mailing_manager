@@ -4,29 +4,27 @@
 <div class="container marketing mt-5">
     {% if object_list %}
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for client in object_list %}
+        {% for message in object_list %}
         <div class="col">
             <div class="d-flex flex-column align-items-center">
                 <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
                      xmlns="http://www.w3.org/2000/svg"
                      role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
                     <title>Placeholder</title>
-                    <polygon points="70,10 130,70 70,130 10,70" fill="var(--bs-secondary-color)"/>
+                    <polygon points="10,10 100,10 100,100 10,100" fill="var(--bs-secondary-color)"/>
                 </svg>
-                <h2 class="fw-normal">Клиент {{ client.name }}</h2>
+                <h3 class="fw-normal">Тема письма:
+                    {{ message.subject|truncatechars:20 }}</h3>
             </div>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <p class="card-text">Email: {{ client.email }}</p>
+                    <p class="card-text">Текст письма: {{ message.body|truncatechars:50 }}</p>
                     <p class="card-text">Рассылки №:
-                        {{ client.mailing_set.all|map:"create_link:mailings:mailing_detail,pk,"|join_by_comma|safe }}
+                        {{ message.mailing_set.all|map:"create_link:mailings:mailing_detail,pk,"|join_by_comma|safe }}
                     </p>
-                    {% if client.comment %}
-                    <p class="card-text">Комментарий: {{ client.comment|truncatechars:100 }}</p>
-                    {% endif %}
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a class="btn btn-secondary" href="{% url 'mailings:client_detail' client.pk %}"
+                            <a class="btn btn-secondary" href="{% url 'mailings:message_detail' message.pk %}"
                                role="button">Посмотреть</a>
                         </div>
                     </div>
@@ -38,8 +36,8 @@
     {% else %}
     <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-            <h2>Упс..</h2>
-            <p class="lead">Не найдено ни одного клиента.</p>
+            <h2>Нет ни одного сообщения</h2>
+            <p class="lead">Создайте новое сообщение</p>
         </div>
     </div>
     {% endif %}

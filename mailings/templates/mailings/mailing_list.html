@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load my_tags %}
 {% block content %}
 <div class="container marketing mt-5">
     {% if object_list %}
@@ -17,12 +18,10 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <p class="card-text">Клиенты:
-                        {% for client in mailing.clients.all %}
-                        <a href="{% url 'mailings:client_detail' client.pk %}">{{ client.name }}</a>
-                        {% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                    <p class="card-text">Сообщение: {{ mailing.message.subject|truncatechars:100 }}</p>
+                        {{ mailing.clients.all|map:"create_link:mailings:client_detail,pk,name"|join_by_comma|safe }} </p>
+                    <p class="card-text">Сообщение:
+                        <a href="{% url 'mailings:message_detail' mailing.message.pk %}">
+                            {{ mailing.message.subject|truncatechars:20 }}</p> </a>
                     <p class="card-text">Периодичность: {{ mailing.get_periodicity_display }}</p>
                     <p class="card-text">
                         <span class="text-body">Статус:</span>
@@ -52,26 +51,6 @@
             <h2>Нет ни единой рассылки</h2>
             <p class="lead">Пока нет ни одной созданной рассылки.</p>
         </div>
-    </div>
-    {% endif %}
-
-    {% if page_obj.paginator.num_pages > 1 %}
-    <div class="paginator mt-2">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; Первая</a>
-                <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-            {% endif %}
-
-            <span class="current">
-                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
-            </span>
-
-            {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
-            {% endif %}
-        </span>
     </div>
     {% endif %}
 </div>

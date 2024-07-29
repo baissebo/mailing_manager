@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load my_tags %}
 {% block content %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
@@ -7,12 +8,10 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <p class="card-text">Клиенты:
-                            {% for client in mailing.clients.all %}
-                            <a href="{% url 'mailings:client_detail' client.pk %}">{{ client.name }}</a>
-                            {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p class="card-text">Сообщение: {{ mailing.message.subject }}</p>
+                            {{ mailing.clients.all|map:"create_link:mailings:client_detail,pk,name"|join_by_comma|safe }} </p>
+                        <p class="card-text">Сообщение:
+                        <a href="{% url 'mailings:message_detail' mailing.message.pk %}">
+                            {{ mailing.message.subject }}</p> </a>
                         <p class="card-text">Периодичность: {{ mailing.get_periodicity_display }}</p>
                         <p class="card-text">
                             <span class="text-body">Статус:</span>
