@@ -1,5 +1,6 @@
 import secrets
 
+from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetView
@@ -76,8 +77,8 @@ class NewPasswordView(PasswordResetView):
 
     def form_valid(self, form):
         email = form.cleaned_data["email"]
-        user = User.objects.get(email=email)
-        if user:
+        try:
+            user = User.objects.get(email=email)
             password = secrets.token_urlsafe(10)
             send_mail(
                 subject="Новый пароль",
@@ -87,5 +88,9 @@ class NewPasswordView(PasswordResetView):
             )
             user.set_password(password)
             user.save()
+            messages.success(self.request, "Новый пароль отправлен на электронную почту")
+            return redirect(self.success_url)
 
-            return redirect(reverse('users:login'))
+        except User.DoesNotExist:
+            messages.error(self.request, "Пользователь с таким email не найден")
+            return super().form_invalid(form)
