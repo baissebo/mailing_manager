@@ -1,18 +1,19 @@
 from django.db import models
 
-NULLABLE = {"blank": True, "null": True}
+from nullable import NULLABLE
+from users.models import User
 
 MAILING_STATUS_CHOICES = (
-    ('created', 'Создана'),
-    ('running', 'Запущена'),
-    ('completed', 'Завершена'),
-    ('failed', 'Неудача'),
+    ("created", "Создана"),
+    ("running", "Запущена"),
+    ("completed", "Завершена"),
+    ("failed", "Неудача"),
 )
 
 MAILING_PERIODICITY_CHOICES = (
-    ('daily', 'Раз в день'),
-    ('weekly', 'Раз в неделю'),
-    ('monthly', 'Раз в месяц'),
+    ("daily", "Раз в день"),
+    ("weekly", "Раз в неделю"),
+    ("monthly", "Раз в месяц"),
 )
 
 
@@ -20,6 +21,9 @@ class Client(models.Model):
     email = models.EmailField(verbose_name="Почта клиента")
     name = models.CharField(max_length=100, verbose_name="Имя клиента")
     comment = models.TextField(verbose_name="Комментарий", **NULLABLE)
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, **NULLABLE, verbose_name="Создатель Клиента"
+    )
 
     def __str__(self):
         return self.name
@@ -33,6 +37,9 @@ class Client(models.Model):
 class Message(models.Model):
     subject = models.CharField(max_length=255, verbose_name="Тема письма")
     body = models.TextField(verbose_name="Тело письма")
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, **NULLABLE, verbose_name="Создатель рассылки"
+    )
 
     def __str__(self):
         return self.subject
@@ -47,12 +54,19 @@ class Mailing(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата создания рассылки"
     )
-    periodicity = models.CharField(max_length=50, choices=MAILING_PERIODICITY_CHOICES, verbose_name="Периодичность")
-    status = models.CharField(max_length=50, choices=MAILING_STATUS_CHOICES, verbose_name="Статус рассылки")
+    periodicity = models.CharField(
+        max_length=50, choices=MAILING_PERIODICITY_CHOICES, verbose_name="Периодичность"
+    )
+    status = models.CharField(
+        max_length=50, choices=MAILING_STATUS_CHOICES, verbose_name="Статус рассылки"
+    )
     message = models.ForeignKey(
         Message, verbose_name="Сообщение", on_delete=models.CASCADE
     )
     clients = models.ManyToManyField(Client, verbose_name="Клиенты")
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, **NULLABLE, verbose_name="Создатель клиента"
+    )
 
     class Meta:
         verbose_name = "Рассылка"

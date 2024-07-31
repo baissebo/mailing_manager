@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from mailings.models import NULLABLE
+from nullable import NULLABLE
 
 
 class User(AbstractUser):

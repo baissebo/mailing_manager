@@ -1,4 +1,3 @@
-# mailings/hide_path.py
 
 def hide_paths(request):
     return {
