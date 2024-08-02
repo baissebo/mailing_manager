@@ -207,12 +207,18 @@
         <p class="lead">Активные рассылки: </p>
         <p class="lead">Количество уникальных клиентов: </p>
         <p class="lead">Статьи блога: </p>
-        <a href="{% url 'mailings:mailing_create' %}" class="btn btn-lg btn-light fw-bold border-white bg-white">Создать рассылку</a>
+        <a href="{% url 'mailings:mailing_create' %}" class="btn btn btn-light fw-bold border-white bg-white mb-2 w-50">Создать
+            рассылку</a>
+        {% if perms.mailings.can_disable_mailing %}
+        <a href="{% url 'users:user_list' %}" class="btn btn btn-light fw-bold border-dark bg-info w-50">Посмотреть
+            список пользователей</a>
+        {% endif %}
         </p>
     </main>
 
     <footer class="mt-auto text-white-50">
-        <p>Добро пожаловать в мой <a href="https://github.com/baissebo/mailing_manager.git" class="text-white">GitHub</a>
+        <p>Добро пожаловать в мой <a href="https://github.com/baissebo/mailing_manager.git"
+                                     class="text-white">GitHub</a>
     </footer>
 </div>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>

@@ -37,6 +37,10 @@
                     <a class="nav-link" href="#">Блог</a>
                 </li>
             </ul>
+            {% if perms.mailings.can_disable_mailing %}
+             <a href="{% url 'users:user_list' %}"
+               class="btn btn-light btn-sm fw-bold border-dark bg-info me-1">Список пользователей</a>
+            {% endif %}
             <a href="{% url 'mailings:message_create' %}"
                class="btn btn-white btn-sm fw-bold border-white bg-dark me-1">Создать сообщение</a>
             <a href="{% url 'mailings:client_create' %}"

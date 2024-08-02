@@ -1,9 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from mailings.forms import MailingForm, ClientForm, MessageForm
+from mailings.forms import MailingForm, ClientForm, MessageForm, ManagerForm
 from mailings.models import Mailing, Client, Message
 
 
@@ -17,7 +19,11 @@ class MailingListView(LoginRequiredMixin, ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Mailing.objects.filter(owner=self.request.user).order_by('-id')
+        user = self.request.user
+        manager = Group.objects.get(name='Manager')
+        if manager in user.groups.all():
+            return Mailing.objects.all().order_by('-id')
+        return Mailing.objects.filter(owner=user).order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,6 +64,14 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('mailings:mailing_detail', kwargs={'pk': self.object.pk})
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return MailingForm
+        elif user.groups.filter(name='Manager').exists():
+            return ManagerForm
+        raise PermissionDenied
+
 
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
@@ -70,7 +84,11 @@ class ClientListView(LoginRequiredMixin, ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Client.objects.filter(owner=self.request.user).order_by('-id')
+        user = self.request.user
+        manager = Group.objects.get(name='Manager')
+        if manager in user.groups.all():
+            return Client.objects.all().order_by('-id')
+        return Client.objects.filter(owner=user).order_by('-id')
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
@@ -113,7 +131,11 @@ class MessageListView(LoginRequiredMixin, ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Message.objects.filter(owner=self.request.user).order_by('-id')
+        user = self.request.user
+        manager = Group.objects.get(name='Manager')
+        if manager in user.groups.all():
+            return Message.objects.all().order_by('-id')
+        return Message.objects.filter(owner=user).order_by('-id')
 
 
 class MessageDetailView(LoginRequiredMixin, DetailView):

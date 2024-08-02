@@ -30,3 +30,9 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['subject', 'body']
+
+
+class ManagerForm(forms.ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ['status']

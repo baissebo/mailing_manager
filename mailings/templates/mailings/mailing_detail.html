@@ -10,8 +10,8 @@
                         <p class="card-text">Клиенты:
                             {{ mailing.clients.all|map:"create_link:mailings:client_detail,pk,name"|join_by_comma|safe }} </p>
                         <p class="card-text">Сообщение:
-                        <a href="{% url 'mailings:message_detail' mailing.message.pk %}">
-                            {{ mailing.message.subject }}</p> </a>
+                            <a href="{% url 'mailings:message_detail' mailing.message.pk %}">
+                                {{ mailing.message.subject }}</p> </a>
                         <p class="card-text">Периодичность: {{ mailing.get_periodicity_display }}</p>
                         <p class="card-text">
                             <span class="text-body">Статус:</span>
@@ -25,12 +25,24 @@
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
+                                {% if perms.mailings.can_disable_mailing %}
+                                <form method="post" action="{% url 'mailings:mailing_update' mailing.pk %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="completed">
+                                    <button type="submit" class="btn btn-sm btn-success rounded me-1">Отключить
+                                        рассылку
+                                    </button>
+                                </form>
+                                <a href="{% url 'mailings:mailing_list' %}"
+                                   class="btn btn-sm btn-secondary rounded me-1">Назад</a>
+                                {% else %}
                                 <a href="{% url 'mailings:mailing_update' object.pk %}"
                                    class="btn btn-sm btn-light rounded me-1">Редактировать</a>
                                 <a href="{% url 'mailings:mailing_delete' object.pk %}"
                                    class="btn btn-sm btn-danger rounded me-1">Удалить</a>
                                 <a href="{% url 'mailings:mailing_list' %}"
                                    class="btn btn-sm btn-secondary rounded me-1">Назад</a>
+                                {% endif %}
                             </div>
                             <small class="text-body-secondary">{{ mailing.created_at|timesince }}</small>
                         </div>

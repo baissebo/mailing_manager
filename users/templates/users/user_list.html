@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container marketing mt-5">
+    {% if perms.mailings.can_disable_mailing %}
+    <div class="d-flex flex-column align-items-center">
+        <h2>Список пользователей</h2>
+        <ul class="list-group">
+            {% for user in object_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    {{ user.fullname }} - {{ user.email }}
+                </div>
+                <div class="ml-5">
+                    {% if user.is_active == False %}
+                    <form method="post" action="{% url 'users:user_unblock' user.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-info btn-sm">Разблокировать</button>
+                    </form>
+                    {% else %}
+                    <form method="post" action="{% url 'users:user_block' user.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Блокировать</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

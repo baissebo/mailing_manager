@@ -2,16 +2,46 @@ import secrets
 
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordResetView
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, ListView
 
 from config.settings import EMAIL_HOST_USER
 from users.forms import UserRegisterForm, UserUpdateForm
 from users.models import User
+
+
+class UserListView(PermissionRequiredMixin, ListView):
+    model = User
+    permission_required = 'mailings.can_disable_mailing'
+
+    def get_queryset(self):
+        return User.objects.filter(is_staff=False).order_by('-id')
+
+
+class UserBlockView(PermissionRequiredMixin, UpdateView):
+    model = User
+    permission_required = 'mailings.can_disable_mailing'
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.is_active = False
+        user.save()
+        return redirect('users:user_list')
+
+
+class UserUnblockView(PermissionRequiredMixin, UpdateView):
+    model = User
+    permission_required = 'mailings.can_disable_mailing'
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.is_active = True
+        user.save()
+        return redirect('users:user_list')
 
 
 class UserCreateView(CreateView):
