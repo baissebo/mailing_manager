@@ -8,10 +8,13 @@ from users.models import User
 
 class Blog(models.Model):
     title = models.CharField(max_length=150, verbose_name="Заголовок поста")
-    slug = AutoSlugField(max_length=50, populate_from="title", unique=True, slugify=slugify)
+    slug = AutoSlugField(
+        max_length=50, populate_from="title", unique=True, slugify=slugify
+    )
     content = models.TextField(verbose_name="Содержимое поста")
-    image = models.ImageField(upload_to="blog_images", verbose_name="Изображение", **NULLABLE
-                              )
+    image = models.ImageField(
+        upload_to="blog_images", verbose_name="Изображение", **NULLABLE
+    )
     views_count = models.PositiveIntegerField(
         default=0, verbose_name="Количество просмотров"
     )
@@ -34,5 +37,5 @@ class Blog(models.Model):
         permissions = [
             ("can_add_post", "Can add post"),
             ("can_change_post", "Can change post"),
-            ("can_delete_post", "Can delete post")
+            ("can_delete_post", "Can delete post"),
         ]

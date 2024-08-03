@@ -21,7 +21,13 @@ class HomeView(ListView):
         context['total_mailings'] = Mailing.objects.count()
         context['active_mailings'] = Mailing.objects.exclude(status='completed').count()
         context['unique_clients'] = Client.objects.values('email').distinct().count()
-        context['random_posts'] = random.sample(list(Blog.objects.all()), 3)
+
+        blog_count = Blog.objects.count()
+        if blog_count < 3:
+            context['random_posts'] = list(Blog.objects.all())
+        else:
+            context['random_posts'] = random.sample(list(Blog.objects.all()), 3)
+
         return context
 
 
@@ -31,7 +37,11 @@ class MailingListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        manager = Group.objects.get(name='Manager')
+        try:
+            manager = Group.objects.get(name='Manager')
+        except Group.DoesNotExist:
+            manager = None
+
         if manager in user.groups.all():
             return Mailing.objects.all().order_by('-id')
         return Mailing.objects.filter(owner=user).order_by('-id')
@@ -96,7 +106,11 @@ class ClientListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        manager = Group.objects.get(name='Manager')
+        try:
+            manager = Group.objects.get(name='Manager')
+        except Group.DoesNotExist:
+            manager = None
+
         if manager in user.groups.all():
             return Client.objects.all().order_by('-id')
         return Client.objects.filter(owner=user).order_by('-id')
@@ -143,7 +157,11 @@ class MessageListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        manager = Group.objects.get(name='Manager')
+        try:
+            manager = Group.objects.get(name='Manager')
+        except Group.DoesNotExist:
+            manager = None
+
         if manager in user.groups.all():
             return Message.objects.all().order_by('-id')
         return Message.objects.filter(owner=user).order_by('-id')
