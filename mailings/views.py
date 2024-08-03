@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
@@ -5,6 +7,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from blogs.models import Blog
 from mailings.forms import MailingForm, ClientForm, MessageForm, ManagerForm
 from mailings.models import Mailing, Client, Message
 
@@ -12,6 +15,14 @@ from mailings.models import Mailing, Client, Message
 class HomeView(ListView):
     model = Mailing
     template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_mailings'] = Mailing.objects.count()
+        context['active_mailings'] = Mailing.objects.exclude(status='completed').count()
+        context['unique_clients'] = Client.objects.values('email').distinct().count()
+        context['random_posts'] = random.sample(list(Blog.objects.all()), 3)
+        return context
 
 
 class MailingListView(LoginRequiredMixin, ListView):

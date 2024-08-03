@@ -21,9 +21,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_crontab',
+    'phonenumber_field',
+    'autoslug',
+
     'mailings',
     'users',
-    'phonenumber_field',
+    'blogs',
 
 ]
 

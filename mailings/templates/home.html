@@ -1,4 +1,5 @@
 {% load static %}
+{% load my_tags %}
 <!doctype html>
 <html lang="en" class="h-100" data-bs-theme="auto">
 <head>
@@ -196,18 +197,23 @@
                 <a class="nav-link fw-bold py-1 px-0" href="/mailing-list">Рассылки</a>
                 <a class="nav-link fw-bold py-1 px-0" href="/client-list">Клиенты</a>
                 <a class="nav-link fw-bold py-1 px-0" href="/message-list">Сообщения</a>
-                <a class="nav-link fw-bold py-1 px-0" href="#">Блог</a>
+                <a class="nav-link fw-bold py-1 px-0" href="/blogs/blog-list">Блог</a>
             </nav>
         </div>
     </header>
 
     <main class="px-3">
         <h1>Блок информации</h1>
-        <p class="lead">Всего рассылок: </p>
-        <p class="lead">Активные рассылки: </p>
-        <p class="lead">Количество уникальных клиентов: </p>
-        <p class="lead">Статьи блога: </p>
-        <a href="{% url 'mailings:mailing_create' %}" class="btn btn btn-light fw-bold border-white bg-white mb-2 w-50">Создать
+        <p class="lead">Всего рассылок: {{ total_mailings }}</p>
+        <p class="lead">Активные рассылки: {{ active_mailings }}</p>
+        <p class="lead">Количество уникальных клиентов: {{ unique_clients }}</p>
+        <p class="lead">Случайные статьи блога: </p>
+        <ul>{% for post in random_posts %}
+            <li>{{ post|create_link:'blogs:blog_detail,slug,title'|safe }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'mailings:mailing_create' %}"
+           class="btn btn btn-light fw-bold border-white bg-white mb-2 w-50">Создать
             рассылку</a>
         {% if perms.mailings.can_disable_mailing %}
         <a href="{% url 'users:user_list' %}" class="btn btn btn-light fw-bold border-dark bg-info w-50">Посмотреть
