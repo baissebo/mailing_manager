@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from email_user_manager import EmailUserManager
 from nullable import NULLABLE
 
 
@@ -22,6 +23,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    objects = EmailUserManager()
 
     class Meta:
         verbose_name = "Пользователь"
